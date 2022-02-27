@@ -38,7 +38,9 @@ def clean_data(df):
         # set each value to be the last character of the string
         categories[column] = categories[column].apply(lambda x: x.split('-')[1])
         # convert column from string to numeric
-        categories[column] = categories[column].astype(str)
+        categories[column] = categories[column].astype(int)
+    categories['related']=categories['related'].replace(2,1)
+    categories=categories.loc[~(categories==0).all(axis=1)]
     # drop the original categories column from `df`
     df=df[['message','genre']]
     # concatenate the original dataframe with the new `categories` dataframe
