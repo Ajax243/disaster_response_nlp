@@ -42,6 +42,8 @@ def clean_data(df):
         categories[column] = categories[column].replace('nan',0)
         categories[column] = categories[column].astype(int)
     categories['related']=categories['related'].replace(2,1)
+    
+    # drop rows with no labels
     categories=categories.loc[~(categories==0).all(axis=1)]
     
     # drop the original categories column from `df`
@@ -50,13 +52,15 @@ def clean_data(df):
     df = pd.concat([df,categories],axis=1)
     # drop duplicates
     df.drop_duplicates(inplace=True)
+    # drop nulls
     df.dropna(inplace=True)
     df=df.reset_index()
-    print(df.dtypes)
+    
     return df
 
 
 def save_data(df, database_filename):
+    #Save Dataframe to a database
     database_file='sqlite:///'+database_filename
     engine = create_engine(database_file)
     
@@ -87,7 +91,8 @@ def main():
               'to as the third argument. \n\nExample: python process_data.py '\
               'disaster_messages.csv disaster_categories.csv '\
               'DisasterResponse.db')
-
+        
+# To run the file copy paste the below line while replacing the last argument with your prefered Database Name
 # python process_data.py disaster_messages.csv disaster_categories.csv DisasterResponse.db
         
 if __name__ == '__main__':

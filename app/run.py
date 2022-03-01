@@ -8,6 +8,7 @@ from nltk.tokenize import word_tokenize
 from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar
+from plotly.offline import iplot
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 import numpy as np
@@ -58,12 +59,12 @@ model = joblib.load("../models/classifier2.pkl")
 def index():
     
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
+    
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
+    
     graphs = [
         {
             'data': [
@@ -83,6 +84,7 @@ def index():
                 }
             }
         }
+        
     ]
     
     # encode plotly graphs in JSON

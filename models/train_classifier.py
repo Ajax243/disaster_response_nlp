@@ -22,6 +22,14 @@ import pickle
 
 
 def load_data(database_filepath):
+    """
+    This function loads the data from the Database and saves it to independent variable x
+    and labels Y 
+    
+    Returns : x , Y  and the column names
+    
+    """
+    
     database_file='sqlite:///'+ database_filepath
     engine = create_engine(database_file)
    
@@ -34,6 +42,13 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    """    
+    This function detects urls in text and replaces it with a specific string
+    divides the string to words
+    converts words to its bare minimum form
+    and removes formatting
+    """
+    
     url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
     detected_urls = re.findall(url_regex, text)
     for url in detected_urls:
@@ -48,15 +63,19 @@ def tokenize(text):
 
 
 def build_model():
+    """
+    This function builds the pipeline that includes transofrmations and the model with its parameters
+    It also uses a gridsearch object to find the best hyperparameters for the model
+    """
     pipeline = Pipeline([
     ('vect', CountVectorizer(tokenizer=tokenize)),
     ('tfidf', TfidfTransformer()),
     ('moc' , MultiOutputClassifier(AdaBoostClassifier()))])
     parameters ={
  
-    'moc__estimator__n_estimators': [100,150],
+    'moc__estimator__n_estimators': [150,200],
     
-    'moc__estimator__learning_rate':[0.5,0.7],
+    'moc__estimator__learning_rate':[0.7,1],
    }
     gridsearch = GridSearchCV(estimator=pipeline, cv=5, verbose=3, scoring='recall_micro',param_grid=parameters)
     
@@ -65,6 +84,9 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    """
+    This function evaluates the percision, recall and F1 score for every class of the model
+    """
     Y_pred_ar=model.predict(X_test)
     Y_pred=pd.DataFrame(Y_pred_ar)
     Y_test=pd.DataFrame(Y_test)
@@ -104,7 +126,9 @@ def main():
               'as the first argument and the filepath of the pickle file to '\
               'save the model to as the second argument. \n\nExample: python '\
               'train_classifier.py ../data/DisasterResponse.db classifier.pkl')
-# python train_classifier.py DisasterResponse.db  .pkl
+        
+# To run the file copy paste the below line while replacing the last two arguments to be your Database Name and the prefered pickle file name        
+# python train_classifier.py DisasterResponse.db  Classifier.pkl
 
 if __name__ == '__main__':
     main()
