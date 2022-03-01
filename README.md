@@ -9,23 +9,28 @@ cleans them and build a classification model based on this data. The model is th
 
 ## 2- Packages used:
 
-NLTK
+NLTK <br>
 re
 
 ## 3- Script Files:
 
-### process_data.py : Contains the script for ingesting, combining and cleaning the data
+- process_data.py : Contains the script for ingesting, combining and cleaning the data
  To run it type the following command in the command line in the Data Folder Directory:
- python process_data.py disaster_messages.csv disaster_categories.csv DataBaseName.db  
+ python process_data.py disaster_messages.csv disaster_categories.csv DataBaseName.db 
+ 
  Rename DataBaseName with your prefered database name
 
-### train_classifier.py : Contains the script for training, evaluating and saving the model to a pickle file
+- train_classifier.py : Contains the script for training, evaluating and saving the model to a pickle file
  To run it type the following command in the command line in the Models Folder Directory:
+ <br>
  python train_classifier.py DataBaseName.db  Classifier.pkl 
+ <br>
  Rename Classifier with your prefered classifier name
 
-### run.py: Contains the Flask web App
+- run.py: Contains the Flask web App
+<br>
 To run it type following command in the command line in the App Folder Directory:
+<br>
 python run.py
 
 Go to http://0.0.0.0:3000/
