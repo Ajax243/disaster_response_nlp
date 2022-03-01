@@ -8,6 +8,10 @@ import re
 
 
 def load_data(messages_filepath, categories_filepath):
+    """
+    This function takes the messages and the categories filepath and returns them in a combined DataFrame
+    """
+    
     # load messages dataset
     messages = pd.read_csv(messages_filepath)
 
@@ -22,6 +26,9 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    """
+    This function takes the DataFrame and cleans it and makes it ready to be ingested by the ML algorithm
+    """
     # create a dataframe of the 36 individual category columns
     categories = df['categories'].str.split(';',expand= True)
     
@@ -60,11 +67,14 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+    """
+    This function saves the clean DataFrame as a table in a Database, and replaces the table if it already exists
+    """
     #Save Dataframe to a database
     database_file='sqlite:///'+database_filename
     engine = create_engine(database_file)
     
-    df.to_sql('disaster_table', engine, index=False)  
+    df.to_sql('disaster_table', engine, index=False, if_exists='replace' )  
 
 
 def main():

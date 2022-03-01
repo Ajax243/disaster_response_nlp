@@ -8,7 +8,6 @@ from nltk.tokenize import word_tokenize
 from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar
-from plotly.offline import iplot
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 import numpy as np
@@ -62,6 +61,8 @@ def index():
     
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
+    num_of_labels=df.iloc[:,2:].sum(axis=0)
+    labels=df.iloc[:,2:].sum(axis=0).index
     
     # create visuals
     
@@ -81,6 +82,24 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=labels,
+                    y=num_of_labels
+                )
+            ],
+
+            'layout': {
+                'title': 'Number of Labels of Trained Data',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Label"
                 }
             }
         }

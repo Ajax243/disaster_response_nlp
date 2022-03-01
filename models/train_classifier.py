@@ -38,6 +38,7 @@ def load_data(database_filepath):
     x = df.message
     Y = df.iloc[:,3:]
     category_names=Y.columns.tolist()
+    
     return x,Y, category_names
 
 
@@ -73,9 +74,9 @@ def build_model():
     ('moc' , MultiOutputClassifier(AdaBoostClassifier()))])
     parameters ={
  
-    'moc__estimator__n_estimators': [150,200],
+    'moc__estimator__n_estimators': [100,150],
     
-    'moc__estimator__learning_rate':[0.7,1],
+    'moc__estimator__learning_rate':[0.8,1],
    }
     gridsearch = GridSearchCV(estimator=pipeline, cv=5, verbose=3, scoring='recall_micro',param_grid=parameters)
     
@@ -105,6 +106,7 @@ def main():
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
         X, Y, category_names = load_data(database_filepath)
+        
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
         
         print('Building model...')
@@ -128,7 +130,7 @@ def main():
               'train_classifier.py ../data/DisasterResponse.db classifier.pkl')
         
 # To run the file copy paste the below line while replacing the last two arguments to be your Database Name and the prefered pickle file name        
-# python train_classifier.py DisasterResponse.db  Classifier.pkl
+# python train_classifier.py DisasterResponse.db  Classifier2.pkl
 
 if __name__ == '__main__':
     main()
