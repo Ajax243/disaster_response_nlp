@@ -22,11 +22,10 @@ re
 
 - train_classifier.py : Contains the script for training, evaluating and saving the model to a pickle file
  To run it type the following command in the command line in the Models Folder Directory:
- <br>
- python train_classifier.py DataBaseName.db  Classifier.pkl 
+  python train_classifier.py DataBaseName.db  Classifier.pkl 
  <br>
  Rename Classifier with your prefered classifier name
-
+<br>
 - run.py: Contains the Flask web App
 <br>
 To run it type following command in the command line in the App Folder Directory:
