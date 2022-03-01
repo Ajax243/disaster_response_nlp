@@ -10,6 +10,25 @@ from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
+import numpy as np
+import pandas as pd
+import sqlite3
+import re
+
+
+from nltk.stem import WordNetLemmatizer
+
+from sqlalchemy import create_engine
+
+from sklearn.multioutput import MultiOutputClassifier
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer, TfidfTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+
+import pickle
+
 
 
 app = Flask(__name__)
@@ -30,7 +49,7 @@ engine = create_engine('sqlite:///../data/DisasterResponse.db')
 df = pd.read_sql_table('disaster_table', engine)
 
 # load model
-model = joblib.load("../models/classifier.pkl")
+model = joblib.load("../models/classifier2.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model

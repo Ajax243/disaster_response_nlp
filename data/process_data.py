@@ -33,20 +33,26 @@ def clean_data(df):
 
     # rename the columns of `categories`
     categories.columns = category_colnames
+    
 
     for column in categories:
         # set each value to be the last character of the string
         categories[column] = categories[column].apply(lambda x: x.split('-')[1])
         # convert column from string to numeric
+        categories[column] = categories[column].replace('nan',0)
         categories[column] = categories[column].astype(int)
     categories['related']=categories['related'].replace(2,1)
     categories=categories.loc[~(categories==0).all(axis=1)]
+    
     # drop the original categories column from `df`
     df=df[['message','genre']]
     # concatenate the original dataframe with the new `categories` dataframe
     df = pd.concat([df,categories],axis=1)
     # drop duplicates
     df.drop_duplicates(inplace=True)
+    df.dropna(inplace=True)
+    df=df.reset_index()
+    print(df.dtypes)
     return df
 
 
@@ -82,6 +88,7 @@ def main():
               'disaster_messages.csv disaster_categories.csv '\
               'DisasterResponse.db')
 
-
+# python process_data.py disaster_messages.csv disaster_categories.csv DisasterResponse.db
+        
 if __name__ == '__main__':
     main()

@@ -15,7 +15,8 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer, Tf
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.svm import SVC
 
 import pickle
 
@@ -27,8 +28,8 @@ def load_data(database_filepath):
     df = pd.read_sql('SELECT * FROM disaster_table', engine)
 
     x = df.message
-    Y = df.iloc[:,2:]
-    category_names=Y.columns
+    Y = df.iloc[:,3:]
+    category_names=Y.columns.tolist()
     return x,Y, category_names
 
 
@@ -50,22 +51,26 @@ def build_model():
     pipeline = Pipeline([
     ('vect', CountVectorizer(tokenizer=tokenize)),
     ('tfidf', TfidfTransformer()),
-    ('moc' , MultiOutputClassifier(RandomForestClassifier(n_estimators=50,max_leaf_nodes=100,max_depth=3, warm_start=False)))])
-    x,Y,category_names=load_data('DisasterResponse.db')   
-    x_train,x_test,Y_train,Y_test=train_test_split(x,Y,test_size=0.20, random_state=42)
-    pipeline.fit(x_train,Y_train)
+    ('moc' , MultiOutputClassifier(AdaBoostClassifier()))])
+    parameters ={
+ 
+    'moc__estimator__n_estimators': [100,150],
     
-    return pipeline
+    'moc__estimator__learning_rate':[0.5,0.7],
+   }
+    gridsearch = GridSearchCV(estimator=pipeline, cv=5, verbose=3, scoring='recall_micro',param_grid=parameters)
+    
+    
+    return gridsearch
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
-    Y_pred=pd.DataFrame(model.predict(X_test))
+    Y_pred_ar=model.predict(X_test)
+    Y_pred=pd.DataFrame(Y_pred_ar)
     Y_test=pd.DataFrame(Y_test)
     
     
-    for col in range(len(category_names)):
-        print(category_names[col])
-        print (classification_report(Y_test.iloc[:,col], Y_pred.iloc[:,col]))
+    print(classification_report(Y_test, Y_pred, target_names = category_names))
 
 
 def save_model(model, model_filepath):
@@ -99,7 +104,7 @@ def main():
               'as the first argument and the filepath of the pickle file to '\
               'save the model to as the second argument. \n\nExample: python '\
               'train_classifier.py ../data/DisasterResponse.db classifier.pkl')
-
+# python train_classifier.py DisasterResponse.db  .pkl
 
 if __name__ == '__main__':
     main()
