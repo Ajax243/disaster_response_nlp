@@ -26,10 +26,9 @@ re
  <br>
  Rename Classifier with your prefered classifier name
 <br>
+
 - run.py: Contains the Flask web App
-<br>
-To run it type following command in the command line in the App Folder Directory:
-<br>
-python run.py
+
+To run it type following command in the command line in the App Folder Directory: python run.py
 
 Go to http://0.0.0.0:3000/
