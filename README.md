@@ -33,3 +33,21 @@ re
 To run it type following command in the command line in the App Folder Directory: python run.py
 
 Go to http://0.0.0.0:3000/
+<br>
+<br>
+## 4- Other files and project layout:
+
+app
+| - template
+| |- master.html # main page of web app
+| |- go.html # classification result page of web app
+|- run.py # Flask file that runs app
+data
+|- disaster_categories.csv # data to process
+|- disaster_messages.csv # data to process
+|- process_data.py
+|- DisasterResponse.db # database to save clean data to
+models
+|- train_classifier.py
+|- classifier2.pkl # saved model
+README.md
