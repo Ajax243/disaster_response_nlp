@@ -38,16 +38,15 @@ Go to http://0.0.0.0:3000/
 ## 4- Other files and project layout:
 
 app
-| - template
-| |- master.html # main page of web app
-| |- go.html # classification result page of web app
-|- run.py # Flask file that runs app
-data
-|- disaster_categories.csv # data to process
-|- disaster_messages.csv # data to process
-|- process_data.py
-|- DisasterResponse.db # database to save clean data to
-models
-|- train_classifier.py
-|- classifier2.pkl # saved model
+| - template <br>
+| |- master.html # main page of web app <br>
+| |- go.html # classification result page of web app <br>
+|- run.py # Flask file that runs app <br>
+data <br>
+|- disaster_categories.csv # data to process <br>
+|- disaster_messages.csv # data to process <br>
+|- process_data.py <br>
+|- DisasterResponse.db # database to save clean data to models <br>
+|- train_classifier.py <br>
+|- classifier2.pkl # saved model <br>
 README.md
